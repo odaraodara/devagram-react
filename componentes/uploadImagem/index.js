@@ -37,8 +37,6 @@ export function UploadImagem({
         }
     }
 
-
-
     return (
         <div className={`uploadImagemContainer ${className}`} onClick={abrirSeletorArquivos}>
             
