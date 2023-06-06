@@ -4,6 +4,7 @@ import Link from "next/link";
 import imagemEnvelope from "../../public/imagens/envelope.svg";
 import imagemChave from "../../public/imagens/chave.svg";
 import imagemLogo from "../../public/imagens/logo.svg";
+import { validarEmail, validarSenha } from "../../utils/validadores";
 import Image from "next/image";
 import Botao from "../botao";
 
@@ -11,19 +12,25 @@ import Botao from "../botao";
 
 
 export default function Login() {
-    const [email,setEmail] = useState("");
-    const [senha,setSenha] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+
+    const validarFormulario = () => {
+        return (
+            validarEmail(email) && validarSenha(senha)
+        )
+    }
 
     return (
         <section className={`paginaLogin paginaPublica`}>
-          <div className="logoContainer">
+            <div className="logoContainer">
                 <Image
                     src={imagemLogo}
                     alt="logotipo"
                     layout="fill"
                     className="logo"
                 />
-            </div> 
+            </div>
 
             <div className="conteudoPaginaPublica">
                 <form>
@@ -33,6 +40,8 @@ export default function Login() {
                         tipo="email"
                         aoAlterarValor={e => setEmail(e.target.value)}
                         valor={email}
+                        msgValidacao="O endereço informado é inválido"
+                        exibirMsgValidacao={email && !validarEmail(email)}
                     />
                     <InputPublico
                         imagem={imagemChave}
@@ -40,11 +49,13 @@ export default function Login() {
                         tipo="password"
                         aoAlterarValor={e => setSenha(e.target.value)}
                         valor={senha}
+                        msgValidacao="Mínimo de 3 caracteres"
+                        exibirMsgValidacao={senha && !validarSenha(senha)}
                     />
                     <Botao
                         texto="Login"
                         tipo="submit"
-                        desabilitado={false}
+                        desabilitado={!validarFormulario()}
                     />
                 </form>
 

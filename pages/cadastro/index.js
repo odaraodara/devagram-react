@@ -9,6 +9,7 @@ import imagemAvatar from "../../public/imagens/avatar.svg";
 import Botao from "@/componentes/botao";
 import InputPublico from "@/componentes/inputPublico";
 import { UploadImagem } from "@/componentes/uploadImagem";
+import { validarNome, validarEmail, validarSenha, validarConfirmacaoSenha } from "../../utils/validadores"
 
 
 export default function Cadastro() {
@@ -17,6 +18,15 @@ export default function Cadastro() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [confirmacaoSenha, setConfirmacaoSenha] = useState("");
+
+    const validarFormulario = () => {
+        return (
+            validarNome(nome)
+            && validarEmail(email)
+            && validarSenha(senha)
+            && validarConfirmacaoSenha(senha,confirmacaoSenha)
+        );
+    }
 
     return (
         <section className={`paginaCadastro paginaPublica`}>
@@ -46,6 +56,8 @@ export default function Cadastro() {
                         tipo="texto"
                         aoAlterarValor={e => setNome(e.target.value)}
                         valor={nome}
+                        msgValidacao="Mínimo de 2 caracteres"
+                        exibirMsgValidacao={nome && !validarNome(nome)}
                     />
 
                     <InputPublico
@@ -54,6 +66,8 @@ export default function Cadastro() {
                         tipo="email"
                         aoAlterarValor={e => setEmail(e.target.value)}
                         valor={email}
+                        msgValidacao="O endereço informado é inválido"
+                        exibirMsgValidacao={email && !validarEmail(email)}
                     />
 
                     <InputPublico
@@ -62,6 +76,8 @@ export default function Cadastro() {
                         tipo="password"
                         aoAlterarValor={e => setSenha(e.target.value)}
                         valor={senha}
+                        msgValidacao="Mínimo de 3 caracteres"
+                        exibirMsgValidacao={senha && !validarSenha(senha)}
                     />
 
                     <InputPublico
@@ -70,12 +86,14 @@ export default function Cadastro() {
                         tipo="password"
                         aoAlterarValor={e => setConfirmacaoSenha(e.target.value)}
                         valor={confirmacaoSenha}
+                        msgValidacao="As senhas precisam ser iguais"
+                        exibirMsgValidacao={confirmacaoSenha && !validarConfirmacaoSenha(senha, confirmacaoSenha)}
                     />
 
                     <Botao
                         texto="Cadastrar"
                         tipo="submit"
-                        desabilitado={false}
+                        desabilitado={!validarFormulario()}
                     />
                 </form>
                 <div className="rodapePaginaPublica">
